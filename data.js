@@ -1,3 +1,4 @@
+export {characterData}
 
 const characterData = {
     hero: {
@@ -15,5 +16,3 @@ const characterData = {
         diceCount: 1,
     }
 }
-
-export default characterData
