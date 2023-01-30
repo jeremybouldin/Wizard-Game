@@ -11,10 +11,26 @@ function render(){
 function attack(){
    wizard.getDiceHtml()
    orc.getDiceHtml()
-
    wizard.takeDamage(orc.currentDiceScore)
    orc.takeDamage(wizard.currentDiceScore)
+   if(wizard.dead || orc.dead){
+      endGame()
+   }
    render()
+}
+
+function endGame(){
+   const endMessage = wizard.dead && orc.dead ? 'No victor, both are dead'
+   : wizard.dead ? 'The Orc is victorious'
+   : 'The wizard is victorious'
+
+   const endEmoji = orc.dead ? '🔮' : '☠️' 
+   document.getElementById('main').innerHTML = 
+   `<div class="end-game">
+        <h2>Game Over</h2>
+        <h3>${endMessage}</h3>
+        <p class="end-emoji">${endEmoji}</p>
+    </div>` 
 }
 
 const wizard = new Character(characterData.hero)
