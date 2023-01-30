@@ -3,8 +3,7 @@ export default Character
 
 function Character(data){
    Object.assign(this, data)
-   
-   
+      
    this.getDiceHtml = function(diceCount){
       this.currentDiceScore = getDiceRollArray(this.diceCount)
       this.diceArray = this.currentDiceScore.map(function(num){
@@ -14,9 +13,16 @@ function Character(data){
    
    this.diceArray = getDicePlaceholderHtml(this.diceCount)
    
+   this.takeDamage = function(attackScoreArray){
+      const totalAttackScore = attackScoreArray.reduce(function(total, currentScore){
+         return total + currentScore
+      })
+      console.log(`${this.name} is reduced by ${totalAttackScore}`)
+      this.health = this.health - totalAttackScore
+   }
+
    this.getCharacterHtml = function(){
       const {name, avatar, health, diceCount, diceArray} = this
-      // let diceHtml = this.getDiceHtml(diceCount)
 
       return `
          <div class="character-card">
