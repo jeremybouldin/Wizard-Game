@@ -11,3 +11,4 @@ function getDiceRollArray(diceCount){
       return `<div class="placeholder-dice"></div>`
    }).join('')
 }
+

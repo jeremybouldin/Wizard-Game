@@ -3,25 +3,42 @@ export default Character
 
 function Character(data){
    Object.assign(this, data)
+   this.diceArray = getDicePlaceholderHtml(this.diceCount)
+
+   this.maxHealth = this.health
       
    this.getDiceHtml = function(diceCount){
       this.currentDiceScore = getDiceRollArray(this.diceCount)
-      this.diceArray = this.currentDiceScore.map(function(num){
-         return `<div class="dice">${num}</div>`
-      }).join('')
+
+      //Arrow function
+      this.diceArray = this.currentDiceScore.map(
+         num => `<div class="dice">${num}</div>`
+         ).join('')
+
+      //Inline function
+      // this.diceArray = this.currentDiceScore.map(function(num){
+      //    return `<div class="dice">${num}</div>`
+      // }).join('')
    }
    
-   this.diceArray = getDicePlaceholderHtml(this.diceCount)
    
    this.takeDamage = function(attackScoreArray){
-      const totalAttackScore = attackScoreArray.reduce(function(total, currentScore){
-         return total + currentScore
-      })
+      //Arrow function
+      const totalAttackScore = attackScoreArray.reduce((total, currentScore) => 
+         total + currentScore
+      )
+
+      //Inline function
+      // const totalAttackScore = attackScoreArray.reduce(function(total, currentScore){
+      //    return total + currentScore
+      // })
       this.health -= totalAttackScore
       if (this.health <= 0){
          this.dead = true
          this.health = 0
       }
+
+      console.log(getPercentage(this.health, this.maxHealth))
    }
 
    this.getCharacterHtml = function(){
@@ -40,3 +57,4 @@ function Character(data){
    }
 }
 
+const getPercentage = (remainingHealth, maximumHealth) => (100*remainingHealth)/maximumHealth
