@@ -1,31 +1,46 @@
 import { characterData } from "./data.js";
 import Character from "./Character.js";
 
+let monstersArray = ["orc", "demon", "goblin"]
+
 document.getElementById('attack-button').addEventListener('click', attack)
 
 function render(){
    document.getElementById('hero').innerHTML = wizard.getCharacterHtml()
-   document.getElementById('monster').innerHTML = orc.getCharacterHtml()
+   document.getElementById('monster').innerHTML = monster.getCharacterHtml()
 }
 
 function attack(){
    wizard.getDiceHtml()
-   orc.getDiceHtml()
-   wizard.takeDamage(orc.currentDiceScore)
-   orc.takeDamage(wizard.currentDiceScore)
-   if(wizard.dead || orc.dead){
-      // endGame()
-   }
+   monster.getDiceHtml()
+   wizard.takeDamage(monster.currentDiceScore)
+   monster.takeDamage(wizard.currentDiceScore)
    render()
+   if(wizard.dead){
+      endGame()
+   } else if (monster.dead){
+      monster = getNewMonster()
+      if(Object.keys(monster).length > 0){
+         render()
+      } else {
+         endGame()
+      }
+   }
+}
+
+function getNewMonster(){
+   const nextMonsterData = characterData[monstersArray.shift()]
+   return nextMonsterData ? new Character(nextMonsterData) : {}
 }
 
 function endGame(){
-   const endMessage = wizard.dead && orc.dead ? 'No victor, both are dead'
-   : wizard.dead ? 'The Orc is victorious'
+   const endMessage = wizard.dead && monster.dead ? 'No victor, both are dead'
+   : wizard.dead ? `The ${monster.name} is victorious`
    : 'The wizard is victorious'
 
-   const endEmoji = orc.dead ? '🔮' : '☠️' 
-   document.getElementById('main').innerHTML = 
+   const endEmoji = wizard.dead ? '☠️' : '🔮'
+
+   document.body.innerHTML = 
    `<div class="end-game">
         <h2>Game Over</h2>
         <h3>${endMessage}</h3>
@@ -34,5 +49,7 @@ function endGame(){
 }
 
 const wizard = new Character(characterData.hero)
-const orc = new Character(characterData.monster)
+let monster = getNewMonster()
+
 render()
+
